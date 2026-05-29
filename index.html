@@ -651,27 +651,29 @@
         </div>
       </div>
     </div>
-    <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
-      <input type="hidden" name="form-name" value="contact">
-      <p style="display:none"><label>Neužpildykite šio lauko: <input name="bot-field"></label></p>
+    <div data-fs-success style="display:none; background:rgba(232,160,32,0.1); border:1px solid var(--accent); padding:24px; border-radius:4px; color:var(--accent); font-weight:600; text-align:center; font-size:17px;">✓ Užklausa išsiųsta! Susisieksime su jumis artimiausiu metu.</div>
+    <div data-fs-error style="display:none; background:rgba(255,107,43,0.1); border:1px solid var(--accent2); padding:16px; border-radius:4px; color:var(--accent2); font-weight:600; margin-bottom:16px;"></div>
+    <form class="contact-form" id="contactForm">
       <h3>Užsisakyti vizitą</h3>
       <div class="form-row">
         <div class="form-group">
           <label>Vardas</label>
-          <input type="text" id="name" name="name" placeholder="Jūsų vardas">
+          <input type="text" id="name" name="name" placeholder="Jūsų vardas" data-fs-field required>
+          <span data-fs-error="name" style="color:var(--accent2); font-size:13px;"></span>
         </div>
         <div class="form-group">
           <label>Telefono nr.</label>
-          <input type="tel" id="phone" name="phone" placeholder="+370 6XX XXXXX">
+          <input type="tel" id="phone" name="phone" placeholder="+370 6XX XXXXX" data-fs-field required>
+          <span data-fs-error="phone" style="color:var(--accent2); font-size:13px;"></span>
         </div>
       </div>
       <div class="form-group">
         <label>Automobilis</label>
-        <input type="text" id="car" name="car" placeholder="pvz. VW Golf 2015, 2.0 TDI">
+        <input type="text" id="car" name="car" placeholder="pvz. VW Golf 2015, 2.0 TDI" data-fs-field>
       </div>
       <div class="form-group">
         <label>Paslauga</label>
-        <select id="service" name="service">
+        <select id="service" name="service" data-fs-field>
           <option value="">Pasirinkite paslaugą...</option>
           <option>Pilna OBD diagnostika</option>
           <option>Gedimų nustatymas</option>
@@ -683,11 +685,15 @@
       </div>
       <div class="form-group">
         <label>Aprašymas / Vieta</label>
-        <textarea id="message" name="message" placeholder="Aprašykite problemą ir nurodykite patogią vietą Kaune..."></textarea>
+        <textarea id="message" name="message" placeholder="Aprašykite problemą ir nurodykite patogią vietą Kaune..." data-fs-field></textarea>
       </div>
-      <button type="submit" class="btn-primary" style="width:100%; font-size:16px;">Siųsti užklausą →</button>
-      <div class="form-success" id="formSuccess">✓ Užklausa išsiųsta! Susisieksime su jumis artimiausiu metu.</div>
+      <button type="submit" class="btn-primary" style="width:100%; font-size:16px;" data-fs-submit-btn>Siųsti užklausą →</button>
     </form>
+    <script>
+      window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+      formspree('initForm', { formElement: '#contactForm', formId: 'xreddkjb' });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
   </div>
 </section>
 
@@ -700,33 +706,6 @@
 </footer>
 
 <script>
-document.getElementById('contactForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  if (!name || !phone) { alert('Prašome įvesti vardą ir telefono numerį.'); return; }
-
-  try {
-    const response = await fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(new FormData(this)).toString(),
-    });
-
-    if (response.ok) {
-      document.getElementById('formSuccess').style.display = 'block';
-      ['name','phone','car','service','message'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-      });
-    } else {
-      alert('Klaida siunčiant užklausą. Bandykite dar kartą.');
-    }
-  } catch (err) {
-    alert('Klaida siunčiant užklausą. Bandykite dar kartą.');
-  }
-});
-
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
