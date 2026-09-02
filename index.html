@@ -869,7 +869,7 @@
         <p class="calc-note">Galutinė kaina priklauso nuo darbo sudėtingumo ir visada suderinama telefonu prieš atvykstant. Atsiskaitymas vietoje.</p>
 
         <a class="calc-btn calc-btn-main" id="calcOrder" href="#kontaktai">Užsisakyti šią diagnostiką</a>
-        <a class="calc-btn" id="calcSms" href="#">Rašyti SMS</a>
+        <a class="calc-btn" id="calcSms" href="sms:+37064886734">Rašyti SMS</a>
         <a class="calc-btn" id="calcCall" href="tel:+37064886734">Skambinti +370 648 86734</a>
       </aside>
 
@@ -1145,7 +1145,10 @@ document.querySelectorAll('.service-card, .step, .contact-item').forEach(el => {
 
     var msg = 'Sveiki! Noriu užsisakyti: ' + parts.map(function (p) { return p[0]; }).join(', ')
             + '. Skaičiuoklė rodo apie ' + sum + ' €. Automobilis: ';
-    smsEl.href = 'sms:+' + TEL + '?&body=' + encodeURIComponent(msg);
+    // Android naudoja "?body=", iOS – "&body=". Kitaip nuoroda tyliai neveikia.
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    smsEl.href = 'sms:+' + TEL + (isIOS ? '&' : '?') + 'body=' + encodeURIComponent(msg);
   }
 
   form.addEventListener('change', update);
