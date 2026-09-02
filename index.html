@@ -120,25 +120,21 @@
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "Gedimų nustatymas",
-          "description": "Tikslus gedimo šaltinio nustatymas ir detalus paaiškinimas"
-        }
+          "name": "Klaidų nuskaitymas ir trynimas",
+          "description": "Klaidų kodų nuskaitymas ir ištrynimas po remonto"
+        },
+        "priceCurrency": "EUR",
+        "price": "25"
       },
       {
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "Klaidų trynimas",
-          "description": "Klaidų kodų ištrynimas po remonto"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Akumuliatoriaus tikrinimas",
-          "description": "Akumuliatoriaus talpos ir krovimo sistemos patikrinimas"
-        }
+          "name": "Gedimo priežasties paieška",
+          "description": "Gyvų duomenų analizė, kai klaidos kodas nerodo tikrosios priežasties"
+        },
+        "priceCurrency": "EUR",
+        "price": "40"
       },
       {
         "@type": "Offer",
@@ -146,7 +142,39 @@
           "@type": "Service",
           "name": "Patikrinimas prieš pirkimą",
           "description": "Naudoto automobilio diagnostika prieš pirkimą"
-        }
+        },
+        "priceCurrency": "EUR",
+        "price": "45"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Adaptacija ir kalibravimas",
+          "description": "Pavarų dėžės, stabdžių, jutiklių kalibravimas po remonto"
+        },
+        "priceCurrency": "EUR",
+        "price": "35"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Techninės apžiūros paruošimas",
+          "description": "Klaidų patikra prieš techninę apžiūrą"
+        },
+        "priceCurrency": "EUR",
+        "price": "30"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Akumuliatoriaus tikrinimas",
+          "description": "Akumuliatoriaus talpos ir krovimo sistemos patikrinimas"
+        },
+        "priceCurrency": "EUR",
+        "price": "20"
       }
     ]
   },
@@ -167,7 +195,15 @@
       "name": "Kiek kainuoja mobili automobilių diagnostika Kaune?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Diagnostikos kaina prasideda nuo 30 €. Galutinė kaina priklauso nuo paslaugos sudėtingumo ir diagnostikos apimties."
+        "text": "Diagnostikos kaina prasideda nuo 30 €. Galutinė kaina priklauso nuo paslaugos sudėtingumo ir diagnostikos apimties. Tikslią kainą galite pasiskaičiuoti svetainės kainos skaičiuoklėje."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kiek kainuoja atvykimas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Dainavos mikrorajone atvykimas nemokamas. Kitur Kauno mieste – 10 €, Kauno rajone iki 20 km – 20 €, 20–35 km nuo Kauno centro – 30 €."
       }
     },
     {
@@ -384,6 +420,106 @@
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .form-success { display: none; background: rgba(232,160,32,0.1); border: 1px solid var(--accent); padding: 16px; border-radius: 4px; color: var(--accent); font-weight: 600; margin-top: 16px; text-align: center; }
 
+  /* ============ KAINOS SKAIČIUOKLĖ ============ */
+  #skaiciuokle { background: var(--black); padding: 0 48px 96px; }
+  .calc-wrap { max-width: 1200px; margin: 0 auto; }
+  .calc-head { max-width: 620px; margin-bottom: 40px; }
+  .calc-head h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: clamp(28px, 4vw, 42px); text-transform: uppercase; line-height: 1;
+    color: var(--white);
+  }
+  .calc-head p { color: var(--muted); margin-top: 14px; font-size: 16px; line-height: 1.7; }
+
+  .calc-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 32px; align-items: start; }
+
+  .calc-panel {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 36px 32px; position: relative; overflow: hidden;
+  }
+  .calc-panel::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .calc-panel fieldset { border: 0; padding: 0; margin: 0 0 30px; }
+  .calc-panel fieldset:last-of-type { margin-bottom: 0; }
+  .calc-panel legend {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 19px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--white); margin-bottom: 14px; padding: 0;
+  }
+  .calc-panel legend em { font-style: normal; color: var(--muted); font-weight: 400; }
+
+  .calc-opt {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 13px 16px; margin-bottom: 8px;
+    background: var(--dark); border: 1px solid var(--border); border-radius: 4px;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  }
+  .calc-opt:hover { border-color: #3d3d48; }
+  .calc-opt input {
+    appearance: none; -webkit-appearance: none;
+    width: 17px; height: 17px; flex: 0 0 17px; margin: 2px 0 0;
+    border: 1.5px solid #4a4a58; border-radius: 50%;
+    position: relative; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  }
+  .calc-opt input[type="checkbox"] { border-radius: 3px; }
+  .calc-opt input:checked { border-color: var(--accent); background: var(--accent); }
+  .calc-opt input[type="radio"]:checked::after {
+    content: ''; position: absolute; inset: 4px; border-radius: 50%; background: var(--card);
+  }
+  .calc-opt input[type="checkbox"]:checked::after {
+    content: ''; position: absolute; left: 5px; top: 1px;
+    width: 5px; height: 9px; border: solid var(--black);
+    border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .calc-opt input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .calc-opt.is-on { border-color: var(--accent); background: rgba(232,160,32,0.07); }
+
+  .calc-opt-text { flex: 1; min-width: 0; font-size: 15.5px; line-height: 1.35; color: var(--text); }
+  .calc-opt-text small { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.5; margin-top: 4px; }
+  .calc-opt-price {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 20px;
+    color: var(--muted); white-space: nowrap; line-height: 1.1;
+  }
+  .calc-opt.is-on .calc-opt-price { color: var(--accent); }
+
+  .calc-out {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 32px; position: sticky; top: 108px;
+  }
+  .calc-out-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+  .calc-out-price {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: clamp(56px, 9vw, 76px); line-height: 0.95; color: var(--accent);
+    margin: 10px 0 6px;
+  }
+  .calc-out-summary { color: var(--muted); font-size: 14px; line-height: 1.5; margin-bottom: 22px; }
+  .calc-lines { list-style: none; border-top: 1px solid var(--border); padding-top: 18px; margin-bottom: 20px; }
+  .calc-lines li { display: flex; justify-content: space-between; gap: 14px; padding: 6px 0; font-size: 14.5px; color: var(--muted); }
+  .calc-lines li b { color: var(--text); font-weight: 500; white-space: nowrap; }
+  .calc-note { font-size: 13px; line-height: 1.6; color: var(--muted); margin-bottom: 22px; }
+  .calc-btn {
+    display: block; width: 100%; text-align: center; text-decoration: none;
+    padding: 14px 18px; border-radius: 4px; margin-top: 10px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px;
+    letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid var(--border); color: var(--text);
+    transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s;
+  }
+  .calc-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .calc-btn-main { background: var(--accent); color: var(--black); border-color: var(--accent); margin-top: 0; }
+  .calc-btn-main:hover { background: #ffc040; color: var(--black); border-color: #ffc040; transform: translateY(-2px); }
+
+  @media (max-width: 900px) {
+    .calc-grid { grid-template-columns: 1fr; gap: 20px; }
+    .calc-out { position: static; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .calc-opt, .calc-btn { transition: none; }
+  }
+  /* ============ /KAINOS SKAIČIUOKLĖ ============ */
+
   footer { background: var(--dark); border-top: 1px solid var(--border); padding: 32px 48px; }
   .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
   .footer-logo { display: flex; align-items: center; }
@@ -393,6 +529,8 @@
     .nav-links { display: none; }
     .hero, section { padding-left: 20px; padding-right: 20px; }
     .hero { padding-top: 100px; }
+    #skaiciuokle { padding-left: 20px; padding-right: 20px; }
+    .calc-panel, .calc-out { padding: 26px 20px; }
     .coverage-wrap, .contact-wrap { grid-template-columns: 1fr; gap: 40px; }
     .form-row { grid-template-columns: 1fr; }
     footer { flex-direction: column; text-align: center; }
@@ -408,6 +546,7 @@
     <a href="#" class="logo" aria-label="Diagnostika24 – pradžios puslapis"><img src="logo.svg" alt="Diagnostika24" /></a>
     <div class="nav-links">
       <a href="#paslaugos">Paslaugos</a>
+      <a href="#skaiciuokle">Kainos</a>
       <a href="atvejai.html">Atvejai</a>
       <a href="#kaip-veikia">Kaip veikia</a>
       <a href="#zona">Aptarnavimo zona</a>
@@ -430,7 +569,7 @@
     <p class="hero-sub">Profesionali diagnostika – pas jus, bet kuriuo paros metu. Atvykstu į sutartą vietą su profesionalia įranga. Dieną, naktį, savaitgaliais ir šventėmis.</p>
     <div class="hero-actions">
       <a href="#kontaktai" class="btn-primary">Užsisakyti vizitą</a>
-      <a href="#paslaugos" class="btn-secondary">Paslaugos</a>
+      <a href="#skaiciuokle" class="btn-secondary">Skaičiuoti kainą</a>
     </div>
     <div class="hero-stats">
       <div>
@@ -527,11 +666,12 @@
   </div>
 </section>
 
-<section id="kainos" style="background: var(--black); padding: 96px 48px;">
+<section id="kainos" style="background: var(--black); padding: 96px 48px 56px;">
   <div class="inner">
     <div class="section-label">Kainos</div>
     <h2 style="font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:clamp(32px,5vw,56px); text-transform:uppercase; line-height:0.95; margin-bottom:48px;">Aiškios kainos<br><span style="color:var(--accent);">be staigmenų</span></h2>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:2px;">
+      
 
       <div style="background:var(--card); border:1px solid var(--border); padding:36px 32px; position:relative; overflow:hidden;">
         <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),var(--accent2));"></div>
@@ -543,7 +683,7 @@
       <div style="background:var(--card); border:1px solid var(--border); padding:36px 32px; position:relative; overflow:hidden;">
         <div style="font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:48px; color:var(--accent); line-height:1;">0 €</div>
         <div style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:20px; text-transform:uppercase; color:var(--white); margin:12px 0 8px;">Atvykimas</div>
-        <div style="color:var(--muted); font-size:14px; line-height:1.6;">Dainavos mikrorajone atvykimas nemokamas. Kituose Kauno rajonuose — nuo 5 € pagal atstumą.</div>
+        <div style="color:var(--muted); font-size:14px; line-height:1.6;">Dainavos mikrorajone atvykimas nemokamas. Kitur Kauno mieste — 10 €, Kauno rajone — nuo 20 € pagal atstumą.</div>
       </div>
 
       <div style="background:var(--card); border:1px solid var(--border); padding:36px 32px; position:relative; overflow:hidden;">
@@ -556,6 +696,187 @@
     <p style="margin-top:24px; color:var(--muted); font-size:14px;">* Galutinė kaina priklauso nuo paslaugos sudėtingumo. Kaina visada suderinama prieš darbą.</p>
   </div>
 </section>
+
+<!-- ============ KAINOS SKAIČIUOKLĖ ============
+     Kainų keitimas: kiekvienoje eilutėje kaina yra dviejose vietose —
+     data-price="30" (skaičiavimui) ir matomame tekste (Google / AI mato tik jį).
+     Keisdamas pakeisk abi.
+-->
+<section id="skaiciuokle">
+  <div class="calc-wrap">
+
+    <div class="calc-head">
+      <h3>Suskaičiuokite savo kainą</h3>
+      <p>Pasirinkite, ko reikia jūsų automobiliui — kainą pamatysite iš karto, be užklausų ir laukimo.</p>
+    </div>
+
+    <div class="calc-grid">
+
+      <form class="calc-panel" id="calcForm" autocomplete="off">
+
+        <fieldset>
+          <legend>Kokios paslaugos reikia?</legend>
+
+          <label class="calc-opt is-on">
+            <input type="radio" name="calc-service" data-price="30" data-label="Pilna OBD diagnostika" data-form="Pilna OBD diagnostika" checked>
+            <span class="calc-opt-text">Pilna OBD diagnostika
+              <small>Visų blokų nuskaitymas: variklis, pavarų dėžė, ABS, oro pagalvės.</small>
+            </span>
+            <span class="calc-opt-price">30 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-service" data-price="25" data-label="Klaidų nuskaitymas ir trynimas" data-form="Kita">
+            <span class="calc-opt-text">Klaidų nuskaitymas ir trynimas
+              <small>Kai gedimas jau žinomas ir tereikia nuskaityti bei ištrinti klaidas.</small>
+            </span>
+            <span class="calc-opt-price">25 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-service" data-price="40" data-label="Gedimo priežasties paieška" data-form="Gedimų nustatymas">
+            <span class="calc-opt-text">Gedimo priežasties paieška
+              <small>Gyvų duomenų analizė, kai klaidos kodas nerodo tikrosios priežasties.</small>
+            </span>
+            <span class="calc-opt-price">40 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-service" data-price="45" data-label="Patikrinimas prieš pirkimą" data-form="Patikrinimas prieš pirkimą">
+            <span class="calc-opt-text">Patikrinimas prieš pirkimą
+              <small>Paslėpti gedimai, užšaldytos ir neseniai ištrintos klaidos, blokų būklė.</small>
+            </span>
+            <span class="calc-opt-price">45 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-service" data-price="35" data-label="Adaptacija arba kalibravimas po remonto" data-form="Kita">
+            <span class="calc-opt-text">Adaptacija arba kalibravimas po remonto
+              <small>Pavarų dėžės, stabdžių, jutiklių, langų ir stogo nustatymai.</small>
+            </span>
+            <span class="calc-opt-price">35 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-service" data-price="30" data-label="Techninės apžiūros paruošimas" data-form="Techninės apžiūros paruošimas">
+            <span class="calc-opt-text">Techninės apžiūros paruošimas
+              <small>Patikrinu, ar nėra klaidų, kurios neleis praeiti apžiūros.</small>
+            </span>
+            <span class="calc-opt-price">30 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-service" data-price="20" data-label="Akumuliatoriaus tikrinimas" data-form="Akumuliatoriaus tikrinimas">
+            <span class="calc-opt-text">Akumuliatoriaus tikrinimas
+              <small>Akumuliatoriaus talpos ir krovimo sistemos patikra.</small>
+            </span>
+            <span class="calc-opt-price">20 €</span>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Kur atvykti? <em>— atvykimo mokestis</em></legend>
+
+          <label class="calc-opt is-on">
+            <input type="radio" name="calc-zone" data-price="0" data-label="Dainavos mikrorajonas" checked>
+            <span class="calc-opt-text">Dainavos mikrorajonas</span>
+            <span class="calc-opt-price">0 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-zone" data-price="10" data-label="Kitur Kauno mieste">
+            <span class="calc-opt-text">Kitur Kauno mieste</span>
+            <span class="calc-opt-price">10 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-zone" data-price="20" data-label="Kauno rajonas iki 20 km">
+            <span class="calc-opt-text">Kauno rajonas iki 20 km</span>
+            <span class="calc-opt-price">20 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-zone" data-price="30" data-label="20–35 km nuo Kauno centro">
+            <span class="calc-opt-text">20–35 km nuo Kauno centro</span>
+            <span class="calc-opt-price">30 €</span>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Kada?</legend>
+
+          <label class="calc-opt is-on">
+            <input type="radio" name="calc-time" data-price="0" data-label="Darbo dieną 08:00–20:00" checked>
+            <span class="calc-opt-text">Darbo dieną, 08:00–20:00</span>
+            <span class="calc-opt-price">0 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-time" data-price="5" data-label="Vakare arba savaitgalį">
+            <span class="calc-opt-text">Vakare 20:00–24:00 arba savaitgalį</span>
+            <span class="calc-opt-price">+5 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="radio" name="calc-time" data-price="15" data-label="Naktį 00:00–08:00">
+            <span class="calc-opt-text">Naktį, 00:00–08:00
+              <small>Iš anksto suderinus telefonu.</small>
+            </span>
+            <span class="calc-opt-price">+15 €</span>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ko dar reikia? <em>— nebūtina</em></legend>
+
+          <label class="calc-opt">
+            <input type="checkbox" name="calc-extra" data-price="25" data-label="DPF priverstinė regeneracija">
+            <span class="calc-opt-text">DPF priverstinė regeneracija</span>
+            <span class="calc-opt-price">+25 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="checkbox" name="calc-extra" data-price="10" data-label="Servisinio intervalo nustatymas">
+            <span class="calc-opt-text">Servisinio intervalo nustatymas</span>
+            <span class="calc-opt-price">+10 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="checkbox" name="calc-extra" data-price="10" data-label="Detali PDF ataskaita">
+            <span class="calc-opt-text">Detali PDF ataskaita
+              <small>Visos rastos klaidos, gyvi duomenys ir išvada PDF formatu — pravartu perkant ar parduodant automobilį.</small>
+            </span>
+            <span class="calc-opt-price">+10 €</span>
+          </label>
+
+          <label class="calc-opt">
+            <input type="checkbox" name="calc-extra" data-price="20" data-label="Antras automobilis toje pačioje vietoje">
+            <span class="calc-opt-text">Antras automobilis toje pačioje vietoje
+              <small>Pigiau, nei užsakyti atskirą vizitą.</small>
+            </span>
+            <span class="calc-opt-price">+20 €</span>
+          </label>
+        </fieldset>
+      </form>
+
+      <aside class="calc-out" aria-live="polite">
+        <div class="calc-out-label">Preliminari kaina</div>
+        <div class="calc-out-price"><span id="calcTotal">30</span> €</div>
+        <p class="calc-out-summary" id="calcSummary">Pilna OBD diagnostika · Dainavos mikrorajonas</p>
+
+        <ul class="calc-lines" id="calcLines"></ul>
+
+        <p class="calc-note">Galutinė kaina priklauso nuo darbo sudėtingumo ir visada suderinama telefonu prieš atvykstant. Atsiskaitymas vietoje.</p>
+
+        <a class="calc-btn calc-btn-main" id="calcOrder" href="#kontaktai">Užsisakyti šią diagnostiką</a>
+        <a class="calc-btn" id="calcSms" href="#">Rašyti SMS</a>
+        <a class="calc-btn" id="calcCall" href="tel:+37064886734">Skambinti +370 648 86734</a>
+      </aside>
+
+    </div>
+  </div>
+</section>
+<!-- ============ /KAINOS SKAIČIUOKLĖ ============ -->
 
 <section id="zona">
   <div class="coverage-wrap">
@@ -763,6 +1084,101 @@ document.querySelectorAll('.service-card, .step, .contact-item').forEach(el => {
   el.style.transition='opacity 0.5s ease, transform 0.5s ease';
   observer.observe(el);
 });
+</script>
+
+<!-- ============ SKAIČIUOKLĖS LOGIKA ============ -->
+<script>
+(function () {
+  var TEL = '37064886734';           // be + ir be tarpų
+  var form    = document.getElementById('calcForm');
+  if (!form) return;
+  var totalEl = document.getElementById('calcTotal');
+  var linesEl = document.getElementById('calcLines');
+  var sumEl   = document.getElementById('calcSummary');
+  var smsEl   = document.getElementById('calcSms');
+  var orderEl = document.getElementById('calcOrder');
+
+  var shown = 30;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lastTotal = 30, lastParts = [];
+
+  function animate(to) {
+    if (reduce) { shown = to; totalEl.textContent = to; return; }
+    var from = shown, t0 = null;
+    function step(t) {
+      if (!t0) t0 = t;
+      var p = Math.min((t - t0) / 260, 1);
+      totalEl.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) { requestAnimationFrame(step); } else { shown = to; totalEl.textContent = to; }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function pick(name) { return form.querySelector('input[name="' + name + '"]:checked'); }
+
+  function update() {
+    // pažymėtų eilučių paryškinimas
+    form.querySelectorAll('.calc-opt').forEach(function (o) {
+      o.classList.toggle('is-on', o.querySelector('input').checked);
+    });
+
+    var parts = [], sum = 0;
+    var svc = pick('calc-service'), zone = pick('calc-zone'), time = pick('calc-time');
+
+    if (svc)  { parts.push([svc.dataset.label, +svc.dataset.price]);  sum += +svc.dataset.price; }
+    if (zone) { parts.push(['Atvykimas — ' + zone.dataset.label, +zone.dataset.price]); sum += +zone.dataset.price; }
+    if (time && +time.dataset.price > 0) { parts.push([time.dataset.label, +time.dataset.price]); sum += +time.dataset.price; }
+
+    form.querySelectorAll('input[name="calc-extra"]:checked').forEach(function (x) {
+      parts.push([x.dataset.label, +x.dataset.price]); sum += +x.dataset.price;
+    });
+
+    linesEl.innerHTML = parts.map(function (p) {
+      return '<li><span>' + p[0] + '</span><b>' + p[1] + ' €</b></li>';
+    }).join('');
+
+    sumEl.textContent = (svc ? svc.dataset.label : '') + (zone ? ' · ' + zone.dataset.label : '');
+    animate(sum);
+
+    lastTotal = sum;
+    lastParts = parts;
+
+    var msg = 'Sveiki! Noriu užsisakyti: ' + parts.map(function (p) { return p[0]; }).join(', ')
+            + '. Skaičiuoklė rodo apie ' + sum + ' €. Automobilis: ';
+    smsEl.href = 'sms:+' + TEL + '?&body=' + encodeURIComponent(msg);
+  }
+
+  form.addEventListener('change', update);
+  update();
+
+  // SMS / skambučio paspaudimai į Google Analytics
+  smsEl.addEventListener('click', function () {
+    if (window.gtag) gtag('event', 'skaiciuokle_sms', { value: lastTotal });
+  });
+  var callEl = document.getElementById('calcCall');
+  if (callEl) callEl.addEventListener('click', function () {
+    if (window.gtag) gtag('event', 'skaiciuokle_skambutis', { value: lastTotal });
+  });
+
+  // „Užsisakyti“ — užpildo užklausos formą apačioje
+  orderEl.addEventListener('click', function () {
+    var svc = pick('calc-service'), zone = pick('calc-zone');
+    var sel = document.getElementById('service');
+    var msg = document.getElementById('message');
+
+    if (sel && svc && svc.dataset.form) {
+      for (var i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].text === svc.dataset.form) { sel.selectedIndex = i; break; }
+      }
+    }
+    if (msg && !msg.value.trim()) {
+      msg.value = lastParts.map(function (p) { return p[0] + ' – ' + p[1] + ' €'; }).join('\n')
+                + '\nViso pagal skaičiuoklę: ' + lastTotal + ' €'
+                + (zone ? '\nVieta: ' + zone.dataset.label + ' – ' : '\nVieta: ');
+    }
+    if (window.gtag) gtag('event', 'skaiciuokle_uzsakymas', { value: lastTotal });
+  });
+})();
 </script>
 </body>
 </html>
